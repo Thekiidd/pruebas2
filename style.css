@@ -2,9 +2,10 @@
   color-scheme: light;
   --bg: #f3f4f6;
   --card: #ffffff;
-  --text: #111827;
-  --muted: #4b5563;
-  --primary: #2563eb;
+  --text: #0f172a;
+  --muted: #475569;
+  --primary: #1d4ed8;
+  --primary-hover: #1e40af;
   --border: #d1d5db;
 }
 
@@ -20,23 +21,39 @@ body {
 }
 
 .container {
-  max-width: 900px;
+  max-width: 980px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 28px 20px 48px;
+}
+
+.hero {
+  margin-bottom: 18px;
 }
 
 .subtitle {
   color: var(--muted);
-  margin-top: -8px;
+  margin-top: -4px;
+}
+
+.help {
+  color: var(--muted);
+  margin-top: 0;
 }
 
 .card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 16px;
-  margin-top: 16px;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 6%);
+  padding: 18px;
+  margin-top: 14px;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
+}
+
+label {
+  display: block;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-weight: 600;
 }
 
 input,
@@ -53,26 +70,42 @@ button {
 button {
   border: none;
   background: var(--primary);
-  color: white;
+  color: #fff;
   font-weight: 600;
   cursor: pointer;
 }
 
+button:hover {
+  background: var(--primary-hover);
+}
+
 pre {
   white-space: pre-wrap;
-  background: #f9fafb;
+  background: #f8fafc;
   border: 1px solid var(--border);
   padding: 10px;
   border-radius: 8px;
-  min-height: 60px;
+  min-height: 64px;
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
 }
 
 #plot {
   margin-top: 12px;
-  min-height: 360px;
+  min-height: 380px;
 }
 
 #plotError {
   color: #b91c1c;
   font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .grid3 {
+    grid-template-columns: 1fr;
+  }
 }

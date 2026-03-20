@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pruebas2 · MVP OCR + Resolver + Gráfica</title>
+    <title>pruebas2 · Calculadora OCR, Álgebra y Cálculo</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/function-plot@1.24.0/dist/function-plot.js" defer></script>
@@ -11,11 +11,14 @@
   </head>
   <body>
     <main class="container">
-      <h1>MVP Matemático (Cliente)</h1>
-      <p class="subtitle">OCR de imagen + resolución básica + graficación</p>
+      <header class="hero">
+        <h1>Calculadora Matemática para Demo</h1>
+        <p class="subtitle">OCR de expresiones + álgebra básica + cálculo diferencial/integral</p>
+      </header>
 
       <section class="card">
-        <h2>1) OCR de imagen</h2>
+        <h2>1) OCR de expresión matemática</h2>
+        <p class="help">Sube una imagen y extrae texto (ej. <code>x^4 + 3x^3 - 2</code>).</p>
         <input id="imageInput" type="file" accept="image/*" />
         <button id="ocrBtn">Extraer texto</button>
         <p id="ocrStatus">Sin procesar</p>
@@ -24,17 +27,40 @@
 
       <section class="card">
         <h2>2) Resolver ecuación (lineal/cuadrática)</h2>
-        <input id="equationInput" type="text" placeholder="Ej: x^2-5*x+6=0 o 2*x+4=0" />
+        <p class="help">Formato esperado: <code>x^2-5*x+6=0</code> o <code>2*x+4=0</code>.</p>
+        <input id="equationInput" type="text" placeholder="Ej: x^2-5*x+6=0" />
         <button id="solveBtn">Resolver</button>
         <pre id="solveOutput"></pre>
       </section>
 
       <section class="card">
         <h2>3) Graficar función</h2>
-        <input id="plotInput" type="text" placeholder="Ej: sin(x) o x^2" />
+        <p class="help">Soporta expresiones de cálculo como <code>x^4 + 3x^3 - 2</code>, <code>sin(x)</code>, <code>exp(x)</code>.</p>
+        <input id="plotInput" type="text" placeholder="Ej: x^4 + 3x^3 - 2" />
         <button id="plotBtn">Graficar</button>
         <p id="plotError"></p>
         <div id="plot"></div>
+      </section>
+
+      <section class="card">
+        <h2>4) Cálculo diferencial e integral (numérico)</h2>
+        <p class="help">Calcula <code>f(x0)</code>, <code>f'(x0)</code> e integral definida <code>∫[a,b] f(x) dx</code>.</p>
+        <div class="grid3">
+          <div>
+            <label for="x0Input">x0</label>
+            <input id="x0Input" type="number" step="any" value="1" />
+          </div>
+          <div>
+            <label for="aInput">a</label>
+            <input id="aInput" type="number" step="any" value="0" />
+          </div>
+          <div>
+            <label for="bInput">b</label>
+            <input id="bInput" type="number" step="any" value="2" />
+          </div>
+        </div>
+        <button id="calcBtn">Calcular análisis</button>
+        <pre id="calcOutput"></pre>
       </section>
     </main>
   </body>

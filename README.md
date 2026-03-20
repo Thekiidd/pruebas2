@@ -1,12 +1,16 @@
 # pruebas2
 
-MVP web 100% cliente (sin backend) para demo en clase.
+Aplicación web (100% cliente, sin backend) para demo académica de OCR matemático, álgebra básica y cálculo numérico.
 
 ## Funcionalidades
 
-- OCR de imagen con **Tesseract.js**.
-- Resolución básica de ecuaciones lineales y cuadráticas.
+- OCR de imagen con **Tesseract.js** para extraer expresiones matemáticas.
+- Resolución de ecuaciones **lineales/cuadráticas** (casos básicos).
 - Graficación de funciones con **function-plot**.
+- Módulo de cálculo numérico para:
+  - evaluación puntual `f(x0)`
+  - derivada aproximada `f'(x0)` (diferencia central)
+  - integral definida `∫[a,b] f(x)dx` (regla de Simpson)
 
 ## Ejecutar localmente
 
@@ -14,27 +18,28 @@ MVP web 100% cliente (sin backend) para demo en clase.
 python3 -m http.server 8000
 ```
 
-Luego abre:
+Abrir en navegador:
 
 - http://localhost:8000
 
-## Pruebas rápidas sugeridas
+## Casos de prueba sugeridos
 
-1. OCR: subir una imagen con texto matemático simple.
-2. Resolver: `x^2-5*x+6=0`.
-3. Graficar: `sin(x)` y `x^2`.
+1. OCR: imagen con `x^4 + 3x^3 - 2`.
+2. Graficar: `x^4 + 3x^3 - 2`.
+3. Cálculo numérico:
+   - `x0 = 1`
+   - `a = 0`, `b = 2`
+4. Solver: `x^2 - 5*x + 6 = 0`.
 
 ## Limitaciones actuales
 
-- OCR no es perfecto para notación compleja.
-- Solver solo cubre casos lineales/cuadráticos básicos.
-- No hay backend ni historial persistente.
+- OCR puede fallar en notación compleja o imágenes de baja calidad.
+- El solver algebraico no cubre ecuaciones de grado mayor ni sistemas.
+- Derivada e integral son aproximaciones numéricas (no simbólicas).
 
 ## Publicar en GitHub Pages
-
-Como es estático, se puede publicar sin build:
 
 1. Push a `main`.
 2. En GitHub: **Settings → Pages**.
 3. Source: `Deploy from a branch`.
-4. Branch: `main` / folder `/root`.
+4. Branch: `main` y carpeta `/root`.

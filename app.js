@@ -11,6 +11,26 @@ const plotInput = document.getElementById('plotInput');
 const plotBtn = document.getElementById('plotBtn');
 const plotError = document.getElementById('plotError');
 
+const x0Input = document.getElementById('x0Input');
+const aInput = document.getElementById('aInput');
+const bInput = document.getElementById('bInput');
+const calcBtn = document.getElementById('calcBtn');
+const calcOutput = document.getElementById('calcOutput');
+
+function normalizeExpression(raw) {
+  return raw
+    .replace(/\s+/g, '')
+    .replace(/(\d)(x)/g, '$1*$2')
+    .replace(/(\))(x|\d)/g, '$1*$2')
+    .replace(/(x)(\d)/g, '$1*$2');
+}
+
+function evaluateExpression(expression, xValue) {
+  const safeExpr = normalizeExpression(expression).replace(/\^/g, '**');
+  const evaluator = new Function('x', `return ${safeExpr};`);
+  return evaluator(xValue);
+}
+
 ocrBtn.addEventListener('click', async () => {
   const file = imageInput.files?.[0];
   if (!file) {
@@ -27,12 +47,20 @@ ocrBtn.addEventListener('click', async () => {
     },
   });
 
-  ocrOutput.value = result.data.text.trim();
+  const text = result.data.text.trim();
+  ocrOutput.value = text;
+
+  if (text) {
+    const firstLine = text.split('\n')[0].trim();
+    plotInput.value = firstLine;
+    equationInput.value = firstLine.includes('=') ? firstLine : equationInput.value;
+  }
+
   ocrStatus.textContent = 'OCR completado.';
 });
 
 function parsePolynomialSide(raw) {
-  const compact = raw.replace(/\s+/g, '').replace(/\*/g, '');
+  const compact = normalizeExpression(raw).replace(/\*/g, '');
   const normalized = compact.replace(/-/g, '+-');
   const terms = normalized.split('+').filter(Boolean);
 
@@ -83,7 +111,7 @@ solveBtn.addEventListener('click', () => {
   const rightTerms = parsePolynomialSide(right);
 
   if (!leftTerms || !rightTerms) {
-    solveOutput.textContent = 'No pude interpretar esa ecuación.';
+    solveOutput.textContent = 'No pude interpretar esa ecuación (solo lineal/cuadrática).';
     return;
   }
 
@@ -124,14 +152,69 @@ plotBtn.addEventListener('click', () => {
   }
 
   try {
+    const normalizedExpr = normalizeExpression(expr);
     functionPlot({
       target: '#plot',
-      width: 800,
-      height: 360,
+      width: 860,
+      height: 380,
       grid: true,
-      data: [{ fn: expr }],
+      data: [{ fn: normalizedExpr }],
     });
   } catch (error) {
     plotError.textContent = `No se pudo graficar: ${error.message}`;
+  }
+});
+
+function derivativeAt(expression, x0) {
+  const h = 1e-5;
+  return (evaluateExpression(expression, x0 + h) - evaluateExpression(expression, x0 - h)) / (2 * h);
+}
+
+function simpsonIntegral(expression, a, b, n = 500) {
+  if (n % 2 !== 0) {
+    n += 1;
+  }
+
+  const h = (b - a) / n;
+  let sum = evaluateExpression(expression, a) + evaluateExpression(expression, b);
+
+  for (let i = 1; i < n; i += 1) {
+    const x = a + i * h;
+    const factor = i % 2 === 0 ? 2 : 4;
+    sum += factor * evaluateExpression(expression, x);
+  }
+
+  return (h / 3) * sum;
+}
+
+calcBtn.addEventListener('click', () => {
+  const expr = plotInput.value.trim();
+  const x0 = Number(x0Input.value);
+  const a = Number(aInput.value);
+  const b = Number(bInput.value);
+
+  if (!expr) {
+    calcOutput.textContent = 'Primero escribe una función en el bloque de gráfica.';
+    return;
+  }
+
+  if ([x0, a, b].some((v) => Number.isNaN(v))) {
+    calcOutput.textContent = 'x0, a y b deben ser valores numéricos válidos.';
+    return;
+  }
+
+  try {
+    const fx0 = evaluateExpression(expr, x0);
+    const dfx0 = derivativeAt(expr, x0);
+    const integral = simpsonIntegral(expr, a, b);
+
+    calcOutput.textContent = [
+      `Función: f(x) = ${expr}`,
+      `f(${x0}) = ${fx0}`,
+      `f'(${x0}) ≈ ${dfx0}`,
+      `∫[${a}, ${b}] f(x) dx ≈ ${integral}`,
+    ].join('\n');
+  } catch (error) {
+    calcOutput.textContent = `No se pudo calcular: ${error.message}`;
   }
 });
