@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pruebas2 · MVP OCR + Resolver + Gráfica</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/function-plot@1.24.0/dist/function-plot.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="container">
+      <h1>MVP Matemático (Cliente)</h1>
+      <p class="subtitle">OCR de imagen + resolución básica + graficación</p>
+
+      <section class="card">
+        <h2>1) OCR de imagen</h2>
+        <input id="imageInput" type="file" accept="image/*" />
+        <button id="ocrBtn">Extraer texto</button>
+        <p id="ocrStatus">Sin procesar</p>
+        <textarea id="ocrOutput" rows="4" placeholder="Aquí aparece el texto detectado"></textarea>
+      </section>
+
+      <section class="card">
+        <h2>2) Resolver ecuación (lineal/cuadrática)</h2>
+        <input id="equationInput" type="text" placeholder="Ej: x^2-5*x+6=0 o 2*x+4=0" />
+        <button id="solveBtn">Resolver</button>
+        <pre id="solveOutput"></pre>
+      </section>
+
+      <section class="card">
+        <h2>3) Graficar función</h2>
+        <input id="plotInput" type="text" placeholder="Ej: sin(x) o x^2" />
+        <button id="plotBtn">Graficar</button>
+        <p id="plotError"></p>
+        <div id="plot"></div>
+      </section>
+    </main>
+  </body>
+</html>
